@@ -7,88 +7,158 @@
 //
 
 import UIKit
+import SimpleAuth
 
-private let reuseIdentifier = "Cell"
+class ExploreCollectionViewController: UICollectionViewController
+{
+    
+    @IBOutlet weak var searchBar: UISearchBar!
+    
+    private var accessToken: String!
+    private var photoDictionaries = [AnyObject]()
+    private let leftAndRightPadding: CGFloat = 32.0
+    private let numberOfItemsPerRow: CGFloat = 3.0
+    private let heightAdjustment: CGFloat = 30.0
+    
+    struct Storyboard {
+        static let explorePhotoCell = "ExplorePhotoCell"
+    }
 
-class ExploreCollectionViewController: UICollectionViewController {
-
-    override func viewDidLoad() {
+    override func viewDidLoad()
+    {
         super.viewDidLoad()
+                self.collectionView?.backgroundColor = UIColor.whiteColor()
+                let width = (CGRectGetWidth(collectionView!.frame) - leftAndRightPadding) / numberOfItemsPerRow
+                let layout = collectionViewLayout as! UICollectionViewFlowLayout
+        layout.itemSize = CGSizeMake(width, width + heightAdjustment)
+        
+        authInstagram()
+        
+    }
+    
+    // MARK: - Helpers
+    
+    func authInstagram()
+    {
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        
+        if let token = userDefaults.objectForKey("accessToken") as? String
+        {
+            self.accessToken = token
+            print("Already logged in")
+            
+            //Load photos
+            
+            fetchPhotos()
+        }
+            
+        else
+        {
+            
+            SimpleAuth.authorize("instagram") { (responseObject, error) -> Void in
+                if let response = responseObject as? NSDictionary
+                {
+                    let credentials = response["credentials"] as! NSDictionary
+                    let accessToken = credentials["token"] as! String
+                    
+                    self.accessToken = accessToken
+                    
+                    userDefaults.setObject(self.accessToken, forKey: "accessToken")
+                    userDefaults.synchronize()
+                    
+                    //load photos
+                    self.fetchPhotos()
+                }
+            }
+            
+        }
 
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Register cell classes
-        self.collectionView!.registerClass(UICollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
-
-        // Do any additional setup after loading the view.
+    }
+    
+    
+    //https://api.instagram.com/v1/tags/{tag-name}/media/recent?access_token=ACCESS-TOKEN
+    func urlWithSearchText(searchText : String) -> NSURL
+    {
+        let escapedSearchText = searchText.stringByReplacingOccurrencesOfString(" ", withString: "")
+        let urlString = "https://api.instagram.com/v1/tags/\(escapedSearchText)/media/recent?access_token=\(self.accessToken)"
+        
+        let url = NSURL(string: urlString)!
+        
+        return url
+    }
+    
+    func fetchPhotos()
+    {
+        let session = NSURLSession.sharedSession()
+        
+        let url: NSURL
+        
+        if !self.searchBar.text!.isEmpty
+        {
+            url = self.urlWithSearchText(self.searchBar.text!)
+        }
+        
+        else
+        {
+            url = self.urlWithSearchText("football")
+        }
+        
+        let request = NSURLRequest(URL: url)
+        
+        let task = session.downloadTaskWithRequest(request) { (localfile, response, error) -> Void in
+            if error == nil
+            {
+                let data = NSData(contentsOfURL: localfile!)
+                
+                do
+                {
+                    let responseDictionary = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.AllowFragments)
+                    
+                    self.photoDictionaries = responseDictionary.valueForKeyPath("data") as! [AnyObject]
+                    print(self.photoDictionaries)
+                }
+                
+                catch let error
+                {
+                    print(error)
+                }
+            }
+            
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                self.collectionView?.reloadData()
+            })
+            
+        }
+        
+        task.resume()
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using [segue destinationViewController].
-        // Pass the selected object to the new view controller.
-    }
-    */
 
     // MARK: UICollectionViewDataSource
 
-    override func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 0
+    override func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int
+    {
+        return 1
     }
 
 
-    override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of items
-        return 0
+    override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int
+    {
+       return self.photoDictionaries.count
+        
     }
 
     override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(reuseIdentifier, forIndexPath: indexPath)
+        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(Storyboard.explorePhotoCell, forIndexPath: indexPath) as! ExplorePhotoCollectionViewCell
     
         // Configure the cell
+        
+        let photoDictionary = photoDictionaries[indexPath.item]
+        
+        cell.photo = photoDictionary
+        
     
         return cell
     }
-
-    // MARK: UICollectionViewDelegate
-
-    /*
-    // Uncomment this method to specify if the specified item should be highlighted during tracking
-    override func collectionView(collectionView: UICollectionView, shouldHighlightItemAtIndexPath indexPath: NSIndexPath) -> Bool {
-        return true
-    }
-    */
-
-    /*
-    // Uncomment this method to specify if the specified item should be selected
-    override func collectionView(collectionView: UICollectionView, shouldSelectItemAtIndexPath indexPath: NSIndexPath) -> Bool {
-        return true
-    }
-    */
-
-    /*
-    // Uncomment these methods to specify if an action menu should be displayed for the specified item, and react to actions performed on the item
-    override func collectionView(collectionView: UICollectionView, shouldShowMenuForItemAtIndexPath indexPath: NSIndexPath) -> Bool {
-        return false
-    }
-
-    override func collectionView(collectionView: UICollectionView, canPerformAction action: Selector, forItemAtIndexPath indexPath: NSIndexPath, withSender sender: AnyObject?) -> Bool {
-        return false
-    }
-
-    override func collectionView(collectionView: UICollectionView, performAction action: Selector, forItemAtIndexPath indexPath: NSIndexPath, withSender sender: AnyObject?) {
-    
-    }
-    */
 
 }

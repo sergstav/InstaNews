@@ -8,6 +8,19 @@
 
 import UIKit
 
-class ExplorePhotoCollectionViewCell: UICollectionViewCell {
+class ExplorePhotoCollectionViewCell: UICollectionViewCell
+{
+    @IBOutlet weak var imageView: UIImageView!
+    @IBOutlet weak var countOfLikes: UILabel!
+    
+    var photo: AnyObject!
+        {
+        didSet
+        {
+            InstagramData.imageForPhoto(photo, size: "thumbnail") { (image) -> Void in
+                self.imageView.image = image
+            }
+        }
+    }
     
 }
