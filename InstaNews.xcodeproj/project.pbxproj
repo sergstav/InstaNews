@@ -19,6 +19,9 @@
 		7A296A041BECDCE300D74572 /* PhotoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A296A031BECDCE300D74572 /* PhotoTableViewCell.swift */; };
 		7A296A061BECDD1700D74572 /* CommentsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A296A051BECDD1700D74572 /* CommentsTableViewCell.swift */; };
 		7A296A0A1BED460B00D74572 /* InstagramData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A296A091BED460B00D74572 /* InstagramData.swift */; };
+		7A296A0F1BED5EFE00D74572 /* DetailPhotoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A296A0E1BED5EFE00D74572 /* DetailPhotoViewController.swift */; };
+		7A296A111BED6ED100D74572 /* PresentDetailTransiotion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A296A101BED6ED100D74572 /* PresentDetailTransiotion.swift */; };
+		7A296A131BED6F1D00D74572 /* DismissDetailTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A296A121BED6F1D00D74572 /* DismissDetailTransition.swift */; };
 		CA4656DB1684DDB7FA9080FA /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC16C596BAEA9DBE308438B2 /* Pods.framework */; };
 /* End PBXBuildFile section */
 
@@ -38,6 +41,9 @@
 		7A296A031BECDCE300D74572 /* PhotoTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoTableViewCell.swift; sourceTree = "<group>"; };
 		7A296A051BECDD1700D74572 /* CommentsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentsTableViewCell.swift; sourceTree = "<group>"; };
 		7A296A091BED460B00D74572 /* InstagramData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InstagramData.swift; sourceTree = "<group>"; };
+		7A296A0E1BED5EFE00D74572 /* DetailPhotoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailPhotoViewController.swift; sourceTree = "<group>"; };
+		7A296A101BED6ED100D74572 /* PresentDetailTransiotion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PresentDetailTransiotion.swift; sourceTree = "<group>"; };
+		7A296A121BED6F1D00D74572 /* DismissDetailTransition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DismissDetailTransition.swift; sourceTree = "<group>"; };
 		BB0DB1C8927CCDC620F60F73 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		FC16C596BAEA9DBE308438B2 /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -97,6 +103,7 @@
 		7A296A071BECE23D00D74572 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				7A296A0E1BED5EFE00D74572 /* DetailPhotoViewController.swift */,
 				7A2969EB1BECC40000D74572 /* Main.storyboard */,
 				7A2969FF1BECD57D00D74572 /* HeaderTableViewCell.swift */,
 				7A296A001BECD57D00D74572 /* HeaderTableViewCell.xib */,
@@ -112,6 +119,8 @@
 			children = (
 				7A2969FD1BECD0DE00D74572 /* FeedTableViewController.swift */,
 				7A2969F91BECCB8000D74572 /* ExploreCollectionViewController.swift */,
+				7A296A101BED6ED100D74572 /* PresentDetailTransiotion.swift */,
+				7A296A121BED6F1D00D74572 /* DismissDetailTransition.swift */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -261,7 +270,10 @@
 				7A296A041BECDCE300D74572 /* PhotoTableViewCell.swift in Sources */,
 				7A2969FA1BECCB8000D74572 /* ExploreCollectionViewController.swift in Sources */,
 				7A296A061BECDD1700D74572 /* CommentsTableViewCell.swift in Sources */,
+				7A296A111BED6ED100D74572 /* PresentDetailTransiotion.swift in Sources */,
 				7A2969FC1BECCBA400D74572 /* ExplorePhotoCollectionViewCell.swift in Sources */,
+				7A296A0F1BED5EFE00D74572 /* DetailPhotoViewController.swift in Sources */,
+				7A296A131BED6F1D00D74572 /* DismissDetailTransition.swift in Sources */,
 				7A296A0A1BED460B00D74572 /* InstagramData.swift in Sources */,
 				7A2969FE1BECD0DE00D74572 /* FeedTableViewController.swift in Sources */,
 			);

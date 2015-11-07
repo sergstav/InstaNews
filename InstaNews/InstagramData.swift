@@ -9,32 +9,24 @@
 import UIKit
 import SAMCache
 
-class InstagramData
-{
-    static func imageForPhoto(photoDictionary: AnyObject, size: String, completion: (image: UIImage) -> Void )
-    {
+class InstagramData {
+    
+    static func imageForPhoto(photoDictionary: AnyObject, size: String, completion: (image: UIImage) -> Void) {
+        
         let photoID = photoDictionary["id"] as! String
-        let key = "\(photoID) - \(size)"
+        let key = "\(photoID)-\(size)" // id-thumbnail
         
-        if let image = SAMCache.sharedCache().imageForKey(key)
-        {
+        if let image = SAMCache.sharedCache().imageForKey(key) {
             completion(image: image)
-        }
-        
-        else
-        {
+        } else {
             
             let urlString = photoDictionary.valueForKeyPath("images.\(size).url") as! String
-            
             let url = NSURL(string: urlString)!
             
             let session = NSURLSession.sharedSession()
-            
             let request = NSURLRequest(URL: url)
-            
             let task = session.downloadTaskWithRequest(request) { (localFile, response, error) -> Void in
-                if error == nil
-                {
+                if error == nil {
                     let data = NSData(contentsOfURL: localFile!)
                     let image = UIImage(data: data!)
                     
@@ -45,9 +37,7 @@ class InstagramData
                     })
                 }
             }
-            
             task.resume()
         }
-        
     }
 }

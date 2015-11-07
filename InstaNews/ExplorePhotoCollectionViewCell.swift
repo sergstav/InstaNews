@@ -13,6 +13,7 @@ class ExplorePhotoCollectionViewCell: UICollectionViewCell
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var countOfLikes: UILabel!
     
+    
     var photo: AnyObject!
         {
         didSet
@@ -22,5 +23,14 @@ class ExplorePhotoCollectionViewCell: UICollectionViewCell
             }
         }
     }
+    
+    var likes :String!
+        {
+        didSet
+        {
+            self.countOfLikes.text = "❤️ " + likes + " likes"
+        }
+    }
+    
     
 }
